@@ -1,0 +1,9 @@
+Credenciales de acceso
+
+Administrador
+	veronica@administrador.cl
+	123456
+
+Vendedor
+	a.espinosa@vendedor.cl
+	123456
