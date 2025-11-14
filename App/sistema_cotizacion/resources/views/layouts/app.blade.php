@@ -53,12 +53,35 @@
                     <a href="{{ route('productos.index') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-2">
                         <i class="bi bi-box"></i> Productos
                     </a>
+                    <a href="{{ route('materiales.index') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-2">
+                        <i class="bi bi-layers"></i> Materiales
+                    </a>
+                    <a href="{{ route('inventario.index') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-2">
+                        <i class="bi bi-box-seam"></i> Inventario
+                    </a>
+                    <a href="{{ route('reportes.cotizaciones_vendedor') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-2">
+                        <i class="bi bi-clipboard-data menu-icon"></i> Reportes
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownReportes">
+
+                        <!-- Reporte de Cotizaciones por Vendedor -->
+                        <a class="dropdown-item"
+                            href="{{ route('reportes.cotizaciones_vendedor') }}">
+                            Cotizaciones por Vendedor
+                        </a>
+
+                    </div>
+                    </li>
                 </div>
                 @elseif (Auth::user()->rol == 2)
                 {{-- Opciones principales --}}
                 <div class="list-group list-group-flush my-3">
                     <a href="{{ route('cotizaciones.index') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-2">
                         <i class="bi bi-people"></i> Cotizaciones
+                    </a>
+                    <a href="{{ route('cotizaciones.visitas') }}" class="list-group-item list-group-item-action bg-dark text-white border-0 py-2">
+                        <i class="bi bi-people"></i> Cotizaciones Externas
                     </a>
                 </div>
                 @endif
@@ -136,10 +159,38 @@
                     </div>
                 </div>
             </nav>
+            @php
+            use App\Models\Material;
 
-            <main class="py-4 px-4">
-                @yield('content')
-            </main>
+            $alertasStock = [];
+
+            if (Auth::check() && Auth::user()->rol == 1) {
+            $alertasStock = Material::with('stock')
+            ->get()
+            ->filter(function ($m) {
+            return $m->stock && $m->stock->stock_actual <= $m->stock->stock_minimo;
+                });
+                }
+                @endphp
+
+                @if (!empty($alertasStock) && count($alertasStock) > 0)
+                <div class="alert alert-warning shadow-sm mx-4 mt-3"
+                    style="border-left: 6px solid #0B52A0;">
+                    <h5 class="mb-2"><strong>⚠ Alerta de Stock Bajo</strong></h5>
+                    <ul class="mb-0">
+                        @foreach ($alertasStock as $a)
+                        <li>
+                            <strong>{{ $a->nombre }}</strong> —
+                            {{ $a->stock->stock_actual }} unidades
+                            (mín. {{ $a->stock->stock_minimo }})
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <main class="py-4 px-4">
+                    @yield('content')
+                </main>
         </div>
     </div>
 </body>

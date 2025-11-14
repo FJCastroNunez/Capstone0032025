@@ -18,10 +18,7 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Listado de Cotizaciones</h4>
-            <a href="{{ route('cotizaciones.create') }}" class="btn btn-light btn-sm">
-                <i class="bi bi-plus-circle"></i> Nueva Cotización
-            </a>
+            <h4 class="mb-0">Cotizaciones Externas</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -38,9 +35,21 @@
                     </thead>
                     <tbody>
                         @foreach ($cotizaciones as $cotizacion)
-                        <tr>
+                        @php
+                        $visto = $cotizacion->datosCliente['visto'] ?? 0;
+
+                        // 🎨 Color de fondo según valor "visto"
+                        // 1 = azul (sin abrir), 2 = verde (abierta), otro = blanco
+                        $colorFila = match($visto) {
+                        1 => '#CFE2FF', // azul suave
+                        2 => '#D1E7DD', // verde suave
+                        default => '#FFFFFF', // blanco
+                        };
+                        @endphp
+
+                        <tr style="background-color: {{ $colorFila }};">
                             <td>{{ $cotizacion->id_cotizacion }}</td>
-                            <td>{{ $cotizacion->datosCliente->nombre ?? 'N/A' }}</td>
+                            <td>{{ $cotizacion->InvitadoCliente['nombre'] ?? 'N/A' }}</td>
                             <td>{{ \Carbon\Carbon::parse($cotizacion->fecha)->format('d/m/Y') }}</td>
                             <td>${{ number_format($cotizacion->total, 0, ',', '.') }}</td>
                             <td>
@@ -57,18 +66,19 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('cotizaciones.descargar', $cotizacion->id_cotizacion) }}"
-                                    target="_blank"
-                                    class="btn btn-outline-primary btn-sm"
-                                    title="Descargar PDF">
+                                <a href="{{ route('cotizaciones.descargar.externo', $cotizacion->id_cotizacion) }}" target="_blank"
+                                    class="btn btn-outline-primary btn-sm" title="Descargar PDF">
                                     <i class="bi bi-download"></i>
                                 </a>
-                                <a href="{{ route('cotizaciones.edit', $cotizacion->id_cotizacion) }}" class="btn btn-outline-warning btn-sm">
+
+                                <a href="{{ route('cotizaciones.edit.externo', $cotizacion->id_cotizacion) }}"
+                                    class="btn btn-outline-warning btn-sm">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                             </td>
                         </tr>
                         @endforeach
+
                     </tbody>
                 </table>
             </div>

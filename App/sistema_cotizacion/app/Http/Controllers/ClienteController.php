@@ -20,7 +20,7 @@ class ClienteController extends Controller
     }
     public function index()
     {
-        $clientes = Cliente::all();
+        $clientes = Cliente::where('id_cliente', '!=', 23)->get();
         return view('app.cliente.index', compact('clientes'));
     }
 

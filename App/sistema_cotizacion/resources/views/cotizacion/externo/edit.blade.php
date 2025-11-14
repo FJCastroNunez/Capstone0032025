@@ -7,7 +7,7 @@
     <div class="card shadow-sm border-0">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0">Editar Cotización #{{ $cotizacion->id_cotizacion }}</h4>
-            <a href="{{ route('cotizaciones.index') }}" class="btn btn-light btn-sm">
+            <a href="{{ route('cotizaciones.visitas') }}" class="btn btn-light btn-sm">
                 <i class="bi bi-arrow-left"></i> Volver
             </a>
         </div>
@@ -29,17 +29,63 @@
             <form action="{{ route('cotizaciones.update', $cotizacion->id_cotizacion) }}" method="POST">
                 @csrf
                 @method('PUT')
-
-                {{-- Información general --}}
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Cliente</label>
-                        <input type="text" class="form-control" value="{{ $cotizacion->datosCliente->nombre }}" readonly>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Cliente Externo</h5>
                     </div>
-                    <div class="col-md-6">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nombre completo</label>
+                                <input type="text" class="form-control"
+                                    name="cliente_json[nombre]"
+                                    value="{{ $cotizacion->InvitadoCliente['nombre'] ?? '' }}"
+                                    readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Correo electrónico</label>
+                                <input type="email" class="form-control"
+                                    name="cliente_json[email]"
+                                    value="{{ $cotizacion->InvitadoCliente['email'] ?? '' }}"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Teléfono</label>
+                                <input type="text" class="form-control"
+                                    name="cliente_json[telefono]"
+                                    value="{{ $cotizacion->InvitadoCliente['telefono'] ?? '' }}"
+                                    readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Dirección</label>
+                                <input type="text" class="form-control"
+                                    name="cliente_json[direccion]"
+                                    value="{{ $cotizacion->InvitadoCliente['direccion'] ?? '' }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Información general --}}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="estado" class="form-label fw-bold">Estado de la Cotización</label>
+                        <select name="estado" id="estado" class="form-select" required>
+                            <option value="1" {{ $cotizacion->estado == 1  ? 'selected' : '' }}>Pendiente</option>
+                            <option value="2" {{ $cotizacion->estado == 2 ? 'selected' : '' }}>Aprobada</option>
+                            <option value="3" {{ $cotizacion->estado == 3 ? 'selected' : '' }}>Rechazada</option>
+                            <option value="4" {{ $cotizacion->estado == 4 ? 'selected' : '' }}>Facturada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label fw-bold">Fecha</label>
                         <input type="date" class="form-control" value="{{ \Carbon\Carbon::parse($cotizacion->fecha)->format('Y-m-d') }}" readonly>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end justify-content-end">
+                        <button type="submit" class="btn btn-primary w-100 w-md-auto">
+                            <i class="bi bi-save"></i> Guardar cambios
+                        </button>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -64,23 +110,7 @@
                 </div>
         </div>
 
-        {{-- Estado editable --}}
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="estado" class="form-label fw-bold">Estado de la Cotización</label>
-                <select name="estado" id="estado" class="form-select" required>
-                    <option value="1" {{ $cotizacion->estado == 1  ? 'selected' : '' }}>Pendiente</option>
-                    <option value="2" {{ $cotizacion->estado == 2 ? 'selected' : '' }}>Aprobada</option>
-                    <option value="3" {{ $cotizacion->estado == 3 ? 'selected' : '' }}>Rechazada</option>
-                    <option value="4" {{ $cotizacion->estado == 4 ? 'selected' : '' }}>Facturada</option>
-                </select>
-            </div>
-            <div class="col-md-6 d-flex align-items-end justify-content-end">
-                <button type="submit" class="btn btn-primary w-100 w-md-auto">
-                    <i class="bi bi-save"></i> Guardar cambios
-                </button>
-            </div>
-        </div>
+
 
         {{-- 🔹 Detalle de productos / materiales --}}
         <div class="mb-4">
@@ -142,7 +172,9 @@
         </div>
 
         {{-- Botones --}}
+        <div class="d-flex justify-content-end">
 
+        </div>
         </form>
         {{-- 🔹 Enviar cotización por correo --}}
         <hr class="my-4">
@@ -178,7 +210,6 @@
 
                 </form>
                 @endif
-
                 {{-- Mensajes de éxito o error --}}
                 @if(session('success'))
                 <div class="alert alert-success mt-3">

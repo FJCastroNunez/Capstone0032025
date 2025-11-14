@@ -10,24 +10,31 @@ class DetalleCotizacion extends Model
     protected $primaryKey = 'id_detalle';
 
     protected $fillable = [
-        'id_detalle',
         'id_cotizacion',
         'id_producto',
-        'cantidad',
-        'precio_unitario',
-        'descuento',
-        'total',
+        'id_material',
+        'ancho',
+        'alto',
+        'espesor',
+        'valor_m2',
+        'subtotal',
         'created_at',
         'updated_at'
     ];
 
-    public function id_cotizacion()
+    public function producto()
     {
-        return $this->hasMany(Cotizacion::class, 'id_cotizacion');
+        return $this->belongsTo(Producto::class, 'id_producto', 'id_producto');
     }
 
-    public function id_producto()
+    public function material()
     {
-        return $this->hasMany(Producto::class, 'id_producto');
+        return $this->belongsTo(Material::class, 'id_material', 'id');
+    }
+
+    // 🔹 Relación inversa con Cotización
+    public function cotizacion()
+    {
+        return $this->belongsTo(Cotizacion::class, 'id_cotizacion', 'id_cotizacion');
     }
 }

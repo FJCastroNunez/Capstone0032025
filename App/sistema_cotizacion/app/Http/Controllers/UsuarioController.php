@@ -23,7 +23,7 @@ class UsuarioController extends Controller
 
     public function index()
     {
-        $usuarios = Usuario::all();
+        $usuarios = Usuario::where('id_usuario', '!=', 8)->get();
         return view('app.usuario.index', compact('usuarios'));
     }
 

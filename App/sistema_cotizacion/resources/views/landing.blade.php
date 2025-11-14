@@ -105,6 +105,7 @@
                 Soluciones en vidrio y aluminio con precisión, calidad y confianza.
             </p>
             <a href="{{ route('login') }}" class="btn-custom mt-4">Acceder al Sistema</a>
+            <a href="{{ route('cotizaciones.visita') }}" class="btn-custom mt-4">Cotiza con nosotros</a>
         </div>
     </div>
 

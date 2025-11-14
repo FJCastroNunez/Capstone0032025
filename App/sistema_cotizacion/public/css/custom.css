@@ -32,3 +32,46 @@ main.py-4 {
     color: #fff !important;
     transition: 0.2s;
 }
+
+/* Barra lateral fija */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 230px;
+    background-color: #0d6efd; /* Azul Bootstrap */
+    color: white;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+}
+
+.sidebar a:hover {
+    background-color: #0b5ed7;
+}
+
+.main-content {
+    margin-left: 230px; /* Igual al ancho del sidebar */
+    padding: 20px;
+}
+.navbar-top {
+    position: fixed;
+    top: 0;
+    left: 230px; /* ajusta según el ancho de tu sidebar */
+    right: 0;
+    height: 60px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    z-index: 1020;
+}
+.main-content {
+    margin-left: 230px;
+    padding: 80px 20px 20px; /* 80px de espacio por la barra superior */
+}

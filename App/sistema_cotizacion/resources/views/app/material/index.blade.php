@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container">
-    <h1>Listado de productos</h1>
+    <h1>Listado de materiales</h1>
 
-    {{-- Botón para registrar nuevo producto --}}
-    <a href="{{ route('productos.create') }}" class="btn btn-success mb-3">
-        + Registrar producto
+    {{-- Botón para registrar nuevo material --}}
+    <a href="{{ route('materiales.create') }}" class="btn btn-success mb-3">
+        + Registrar material
     </a>
 
     {{-- Mensaje de éxito --}}
@@ -19,28 +19,28 @@
     {{-- Tabla dinámica --}}
     <div class="card shadow-sm">
         <div class="card-body">
-            <table id="tabla-productos" class="table table-striped table-hover">
+            <table id="tabla-materiales" class="table table-striped table-hover">
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Activo</th>
+                        <th>Espesor</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($productos as $producto)
+                    @forelse ($materiales as $material)
                     <tr>
-                        <td>{{ $producto->id_producto }}</td>
-                        <td>{{ $producto->nombre }}</td>
-                        <td>{{ $producto->activo }}</td>
+                        <td>{{ $material->id }}</td>
+                        <td>{{ $material->nombre }}</td>
+                        <td>{{ $material->espesor }}</td>
                         <td>
-                            <a href="{{ route('productos.edit', $producto->id_producto) }}" class="btn btn-sm btn-primary">Editar</a>
+                            <a href="{{ route('materiales.edit', $material->id) }}" class="btn btn-sm btn-primary">Editar</a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center">No hay productos registrados.</td>
+                        <td colspan="8" class="text-center">No hay materiales registrados.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -53,7 +53,7 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $('#tabla-productos').DataTable({
+        $('#tabla-materiales').DataTable({
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
             },

@@ -15,6 +15,8 @@ class CotizacionAdjunta extends Model
     // Clave primaria personalizada
     protected $primaryKey = 'id';
 
+    public $timestamps = false;
+
     // Campos que pueden asignarse masivamente
     protected $fillable = [
         'id_cotizacion',
